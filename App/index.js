@@ -5,7 +5,8 @@ import {
   StyleSheet,
   StatusBar,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  Image,
 } from "react-native";
 
 import { AVAILABLE_CARDS } from "./data/availableCards";
@@ -17,36 +18,38 @@ const CARD_HEIGHT = Math.floor(CARD_WIDTH * (323 / 222));
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#7CB48F",
-    flex: 1
+    flex: 1,
   },
   safearea: {
     alignItems: "center",
     justifyContent: "center",
-    flex: 1
+    flex: 1,
   },
   row: {
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
     width: "100%",
-    marginVertical: 10
+    marginVertical: 10,
   },
   card: {
     backgroundColor: "#fff",
     borderColor: "#fff",
     borderWidth: 5,
-    borderRadius: 3
+    borderRadius: 3,
   },
   cardImage: {
     width: CARD_WIDTH,
-    height: CARD_HEIGHT
-  }
+    height: CARD_HEIGHT,
+  },
 });
 
 class Card extends React.Component {
   render() {
-    const { onPress } = this.props;
-    const displayImage = null;
+    const { onPress, image } = this.props;
+    const displayImage = (
+      <Image source={image} style={styles.cardImage} resizeMode="contain" />
+    );
 
     return (
       <TouchableOpacity onPress={onPress}>
@@ -64,11 +67,50 @@ class Row extends React.Component {
 
 const initialState = {
   data: [],
-  moveCount: 0
+  moveCount: 0,
 };
 
 class App extends React.Component {
   state = initialState;
+
+  componentDidMount() {
+    this.draw();
+  }
+
+  draw = () => {
+    const possibleCards = [...AVAILABLE_CARDS];
+    const selectedCards = [];
+
+    for (let i = 0; i < 6; i += 1) {
+      const randomIndex = Math.floor(Math.random() * possibleCards.length);
+      const card = possibleCards[randomIndex];
+
+      selectedCards.push(card);
+      selectedCards.push(card);
+
+      possibleCards.splice(randomIndex, 1);
+    }
+
+    selectedCards.sort(() => 0.5 - Math.random());
+
+    const cardRow = [];
+    const columnSize = 3;
+    let index = 0;
+
+    while (index < selectedCards.length) {
+      cardRow.push(selectedCards.slice(index, columnSize + index));
+      index += columnSize;
+    }
+
+    const data = cardRow.map((row, i) => {
+      return {
+        name: i,
+        columns: row.map((image) => ({ image })),
+      };
+    });
+
+    this.setState({ data });
+  };
 
   handleCardPress = () => {};
 
@@ -83,7 +125,11 @@ class App extends React.Component {
                 const cardId = `${row.name}-${card.image}-${index}`;
 
                 return (
-                  <Card key={cardId} onPress={() => this.handleCardPress()} />
+                  <Card
+                    key={cardId}
+                    onPress={() => this.handleCardPress()}
+                    image={card.image}
+                  />
                 );
               })}
             </Row>
