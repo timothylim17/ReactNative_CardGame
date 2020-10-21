@@ -78,6 +78,7 @@ class Row extends React.Component {
 const initialState = {
   data: [],
   moveCount: 0,
+  selectedIndices: [],
 };
 
 class App extends React.Component {
@@ -122,7 +123,15 @@ class App extends React.Component {
     this.setState({ data });
   };
 
-  handleCardPress = () => {};
+  handleCardPress = (cardId) => {
+    this.setState((state) => {
+      const nextState = {};
+
+      nextState.selectedIndices = [...state.selectedIndices, cardId];
+
+      return nextState;
+    });
+  };
 
   render() {
     return (
@@ -137,9 +146,9 @@ class App extends React.Component {
                 return (
                   <Card
                     key={cardId}
-                    onPress={() => this.handleCardPress()}
+                    onPress={() => this.handleCardPress(cardId)}
                     image={card.image}
-                    isVisible={index < 1}
+                    isVisible={this.state.selectedIndices.includes(cardId)}
                   />
                 );
               })}
