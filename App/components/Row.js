@@ -2,8 +2,8 @@ import React from "react";
 import { Animated, StyleSheet, Dimensions } from "react-native";
 
 const screen = Dimensions.get("window");
-const CARD_WIDTH = Math.floor(screen.width * 0.25);
-const CARD_HEIGHT = Math.floor(CARD_WIDTH * (323 / 222));
+let CARD_WIDTH;
+let CARD_HEIGHT;
 
 const getRowOffset = (index) => {
   switch (index) {
@@ -33,8 +33,17 @@ const styles = StyleSheet.create({
 export default class Row extends React.Component {
   offset = new Animated.Value(CARD_HEIGHT * getRowOffset(this.props.index));
   opacity = new Animated.Value(0);
+  // isEasy = this.props.diffEasy;
 
   componentDidMount() {
+    if (this.props.diffEasy) {
+      CARD_WIDTH = Math.floor(screen.width * 0.25);
+      CARD_HEIGHT = Math.floor(CARD_WIDTH * (323 / 222));
+    } else {
+      CARD_WIDTH = Math.floor(screen.width * 2);
+      CARD_HEIGHT = Math.floor(CARD_WIDTH * 2);
+    }
+
     this.timeout = setTimeout(() => {
       Animated.parallel([
         Animated.timing(this.offset, {

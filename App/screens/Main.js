@@ -24,22 +24,23 @@ const styles = StyleSheet.create({
 });
 
 export default class Main extends React.Component {
-  state = {
-    difficulty: "easy",
-    isDifficultyEasy: "",
-  };
-
   render() {
     return (
       <View style={styles.container}>
         <SafeAreaView style={styles.safearea}>
           <View style={styles.buttonView}>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("Game")}
+              onPress={() =>
+                this.props.navigation.navigate("Game", { isEasy: true })
+              }
             >
               <Text style={styles.text}>Easy</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => null}>
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate("Game", { isEasy: false })
+              }
+            >
               <Text style={styles.text}>Hard</Text>
             </TouchableOpacity>
           </View>

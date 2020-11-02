@@ -25,19 +25,21 @@ const styles = StyleSheet.create({
   },
 });
 
-const initialState = {
-  data: [],
-  moveCount: 0,
-  selectedIndices: [],
-  currentImage: null,
-  matchedPairs: [],
-  isDiffultyEasy: true,
-};
-
 export default class Game extends React.Component {
-  state = initialState;
+  state = {
+    data: [],
+    moveCount: 0,
+    selectedIndices: [],
+    currentImage: null,
+    matchedPairs: [],
+    isDifficultyEasy: this.props.navigation.getParam("isEasy"),
+  };
 
   componentDidMount() {
+    this.setState({
+      isDifficultyEasy: this.props.navigation.getParam("isEasy"),
+    });
+    // console.log("prop isDiff", this.state.isDifficultyEasy);
     this.draw();
   }
 
@@ -53,10 +55,6 @@ export default class Game extends React.Component {
       `You completed the puzzle in ${this.state.moveCount} moves!`,
       [
         {
-          text: "Reset Game",
-          onPress: () => this.setState({ ...initialState }, () => this.draw()),
-        },
-        {
           text: "Home",
           onPress: () => this.props.navigation.navigate("Main"),
         },
@@ -67,8 +65,15 @@ export default class Game extends React.Component {
   draw = () => {
     const possibleCards = [...AVAILABLE_CARDS];
     const selectedCards = [];
+    let numCards;
 
-    for (let i = 0; i < 6; i += 1) {
+    if (this.state.isDifficultyEasy) {
+      numCards = 6;
+    } else {
+      numCards = 15;
+    }
+
+    for (let i = 0; i < numCards; i += 1) {
       const randomIndex = Math.floor(Math.random() * possibleCards.length);
       const card = possibleCards[randomIndex];
 
@@ -81,8 +86,14 @@ export default class Game extends React.Component {
     selectedCards.sort(() => 0.5 - Math.random());
 
     const cardRow = [];
-    const columnSize = 3;
+    let columnSize;
     let index = 0;
+
+    if (this.state.isDifficultyEasy) {
+      columnSize = 3;
+    } else {
+      columnSize = 5;
+    }
 
     while (index < selectedCards.length) {
       cardRow.push(selectedCards.slice(index, columnSize + index));
@@ -138,7 +149,11 @@ export default class Game extends React.Component {
         <StatusBar barStyle="light-content" />
         <SafeAreaView style={styles.safearea}>
           {this.state.data.map((row, rowIndex) => (
-            <Row key={row.name} index={rowIndex}>
+            <Row
+              key={row.name}
+              index={rowIndex}
+              diffEasy={this.state.isDifficultyEasy}
+            >
               {row.columns.map((card, index) => {
                 const cardId = `${row.name}-${card.image}-${index}`;
 
