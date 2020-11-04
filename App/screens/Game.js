@@ -167,6 +167,7 @@ export default class Game extends React.Component {
                       this.state.selectedIndices.includes(cardId) ||
                       this.state.matchedPairs.includes(card.image)
                     }
+                    isEasy={this.state.isDifficultyEasy}
                   />
                 );
               })}

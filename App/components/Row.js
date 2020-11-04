@@ -2,8 +2,8 @@ import React from "react";
 import { Animated, StyleSheet, Dimensions } from "react-native";
 
 const screen = Dimensions.get("window");
-let CARD_WIDTH;
-let CARD_HEIGHT;
+let CARD_WIDTH = Math.floor(screen.width * 0.25);
+let CARD_HEIGHT = Math.floor(CARD_WIDTH * (323 / 222));
 
 const getRowOffset = (index) => {
   switch (index) {
@@ -36,14 +36,6 @@ export default class Row extends React.Component {
   // isEasy = this.props.diffEasy;
 
   componentDidMount() {
-    if (this.props.diffEasy) {
-      CARD_WIDTH = Math.floor(screen.width * 0.25);
-      CARD_HEIGHT = Math.floor(CARD_WIDTH * (323 / 222));
-    } else {
-      CARD_WIDTH = Math.floor(screen.width * 2);
-      CARD_HEIGHT = Math.floor(CARD_WIDTH * 2);
-    }
-
     this.timeout = setTimeout(() => {
       Animated.parallel([
         Animated.timing(this.offset, {

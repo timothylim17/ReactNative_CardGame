@@ -18,9 +18,13 @@ const styles = StyleSheet.create({
     borderWidth: 5,
     borderRadius: 3,
   },
-  cardImage: {
+  cardImageEasy: {
     width: CARD_WIDTH,
     height: CARD_HEIGHT,
+  },
+  cardImageHard: {
+    width: CARD_WIDTH / 1.75,
+    height: CARD_HEIGHT / 1.75,
   },
 });
 
@@ -55,19 +59,40 @@ export default class Card extends React.Component {
   }
 
   render() {
-    const { onPress, image, isVisible } = this.props;
+    const { onPress, image, isVisible, isEasy } = this.props;
     let displayImage = (
-      <Image source={image} style={styles.cardImage} resizeMode="contain" />
+      <Image source={image} style={styles.cardImageEasy} resizeMode="contain" />
     );
 
     if (!isVisible) {
       displayImage = (
         <Image
           source={require("../assets/card-back.png")}
-          style={styles.cardImage}
+          style={styles.cardImageEasy}
           resizeMode="contain"
         />
       );
+    }
+
+    // If Difficulty Hard
+    if (!isEasy) {
+      if (!isVisible) {
+        displayImage = (
+          <Image
+            source={require("../assets/card-back.png")}
+            style={styles.cardImageHard}
+            resizeMode="contain"
+          />
+        );
+      } else {
+        displayImage = (
+          <Image
+            source={image}
+            style={styles.cardImageHard}
+            resizeMode="contain"
+          />
+        );
+      }
     }
 
     const animationStyles = {

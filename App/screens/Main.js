@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   Text,
   Button,
+  Image,
 } from "react-native";
 
 const styles = StyleSheet.create({
@@ -18,9 +19,24 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flex: 1,
   },
-  buttonView: {},
-  button: {},
-  text: {},
+  button: {
+    borderRadius: 10,
+    borderColor: "#000",
+    marginTop: 5,
+    marginBottom: 5,
+    borderWidth: 2,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  text: {
+    color: "#fff",
+    fontSize: 40,
+    padding: 5,
+  },
+  icon: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
 export default class Main extends React.Component {
@@ -28,8 +44,13 @@ export default class Main extends React.Component {
     return (
       <View style={styles.container}>
         <SafeAreaView style={styles.safearea}>
+          <Image
+            style={styles.icon}
+            source={require("../assets/card-main.png")}
+          />
           <View style={styles.buttonView}>
             <TouchableOpacity
+              style={styles.button}
               onPress={() =>
                 this.props.navigation.navigate("Game", { isEasy: true })
               }
@@ -37,6 +58,7 @@ export default class Main extends React.Component {
               <Text style={styles.text}>Easy</Text>
             </TouchableOpacity>
             <TouchableOpacity
+              style={styles.button}
               onPress={() =>
                 this.props.navigation.navigate("Game", { isEasy: false })
               }
